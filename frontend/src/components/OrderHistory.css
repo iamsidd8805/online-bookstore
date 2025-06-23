@@ -1,0 +1,28 @@
+/* OrderHistory.css */
+.order-history {
+    padding: 20px;
+  }
+  
+  .order-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+  }
+  
+  .order-item h2 {
+    margin: 0 0 10px;
+  }
+  
+  .order-item p {
+    margin: 5px 0;
+  }
+  
+  .order-item ul {
+    margin: 10px 0 0;
+    padding-left: 20px;
+  }
+  
+  .order-item ul li {
+    list-style-type: disc;
+  }

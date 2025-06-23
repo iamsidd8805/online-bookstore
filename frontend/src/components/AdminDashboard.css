@@ -1,0 +1,249 @@
+.admin-dashboard {
+  padding: 0%;
+}
+
+.books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.book {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.book img {
+  width: 100%;
+  height: auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #333;
+  color: #fff;
+  border-bottom: 2px solid #ddd;
+}
+
+.admin-header h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.button-container {
+  display: flex;
+  gap: 15px;
+}
+
+.admin-header button {
+  font-size: 16px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  width: 110px;
+  height: 40px;
+  animation: all ease;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
+
+.all-orders-button {
+  background-color: #007bff;
+  color: white;
+  margin-top: 20px;
+  width: 110px;
+  height: 40px;
+}
+
+.all-orders-button:hover {
+  background-color: #0056b3;
+}
+
+.add-book-box {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* spacing between buttons */
+}
+
+.add-book-btn,
+.put-on-sale-btn {
+  height: 50px;
+  width: 150px;
+  font-size: 20px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  animation: all ease;
+}
+
+.add-book-btn {
+  background-color: #dc3545;
+}
+
+.add-book-btn:hover {
+  background-color: #b31122;
+}
+
+.put-on-sale-btn {
+  background-color: #28a745; /* green for sale button */
+}
+
+.put-on-sale-btn:hover {
+  background-color: #1e7e34;
+}
+
+.book_list {
+  font-size: 40px;
+  margin-left: 20px;
+}
+
+table {
+  width: 100%;
+  max-width: 850px;
+  margin: 20px auto;
+  border-radius: 10px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+td {
+  padding: 15px;
+}
+
+.Book-Image {
+  width: 210px;
+  height: 330px;
+  border-radius: 5px;
+}
+
+.book_title {
+  font-size: 35px;
+  font-weight: bold;
+  margin: 0%;
+  margin-top: 5px;
+  color: black !important;
+}
+
+.book_author {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: black !important;
+}
+
+.book_genre {
+  margin: 5px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: black !important;
+}
+
+.book_desc {
+  font-size: 18px;
+  font-weight: bold;
+  color: black !important;
+}
+
+.book_price {
+  font-size: 18px;
+  font-weight: bold;
+  color: black !important;
+}
+
+.book_quantity {
+  font-size: 18px;
+  font-weight: bold;
+  color: black !important;
+}
+
+.book_ {
+  margin: 5px 0;
+  font-size: 40px;
+}
+
+.book_title:nth-of-type(3),
+.book_title:nth-of-type(5),
+.book_title:nth-of-type(6) {
+  font-size: 16px;
+  color: #666;
+}
+
+.book-delete-btn,
+.book-update-button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.book-delete-btn {
+  background-color: #dc3545;
+  color: white;
+  height: 40px;
+  width: 95px;
+  animation: all ease;
+}
+
+.book-delete-btn:hover {
+  background-color: #c82333;
+}
+
+.book-update-button {
+  background-color: #007bff;
+  color: white;
+  margin-left: 10px;
+  height: 40px;
+  width: 120px;
+  animation: all ease;
+}
+
+.book-update-button:hover {
+  background-color: #0056b3;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+.book-item {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 10px #333;
+  transition: all ease;
+}
+
+.book-item:hover {
+  transform: scale(1.05);
+}
+
+.book-item table {
+  width: 100%;
+}
+
+.image-box {
+  margin: 0;
+}
