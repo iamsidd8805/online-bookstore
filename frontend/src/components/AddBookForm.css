@@ -43,3 +43,6 @@
   .add-book-form button:hover {
     background-color: #218838;
   }
+  .nm{
+    color: gray !important;
+  }

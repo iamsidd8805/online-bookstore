@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import Header from './Header';
 import { AuthContext } from '../context/AuthContext';
-import './OrderHistory.css';
+import './OrderHistory.css'; // Optional: Add styles for this component
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -10,14 +11,16 @@ const OrderHistory = () => {
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
+        console.log('Fetching order history for user:', user);
         const response = await axios.get('http://localhost:5000/api/orders', {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
+        console.log('Order history response:', response.data);
         setOrders(response.data);
       } catch (err) {
-        // Optionally show error UI
+        console.error('Error fetching order history:', err);
       }
     };
 
@@ -27,64 +30,56 @@ const OrderHistory = () => {
   }, [user]);
 
   return (
-    <div className="order-history-pro">
-      <div className="order-history-header">
+    <>
+      <Header />
+      <div className="order-history">
         <h1>
-          <span role="img" aria-label="orders">📦</span> My Orders
-        </h1>
-        <p className="order-history-subtitle">
-          Track your recent purchases and download your invoices.
-        </p>
-      </div>
-      {orders.length === 0 ? (
-        <div className="order-history-empty">
           <img
-            src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
-            alt="No orders"
-            className="order-history-empty-img"
+            src="https://cdn-icons-png.flaticon.com/512/891/891462.png"
+            alt="Checkout"
+            className="checkout-logo"
           />
-          <p>No orders found. Start shopping to see your orders here!</p>
-        </div>
-      ) : (
-        <div className="order-history-list">
-          {orders.map((order) => (
-            <div className="order-card" key={order._id}>
-              <div className="order-card-header">
-                <div>
-                  <span className="order-id">Order #{order._id.slice(-6).toUpperCase()}</span>
-                  <span className="order-date">
-                    {new Date(order.createdAt).toLocaleDateString()} &bull; {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
+          Order History
+        </h1>
+        {orders.length === 0 ? (
+          <p>No orders found.</p>
+        ) : (
+          <ul>
+            {orders.map((order) => (
+              <li key={order._id} className="order-item">
+                <div className="order-summary-row">
+                  <div>
+                    <span className="order-label">Order ID:</span>
+                    <span className="order-value">{order._id}</span>
+                  </div>
+                  <div>
+                    <span className="order-label">Date:</span>
+                    <span className="order-value">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="order-label">Total:</span>
+                    <span className="order-value">₹{order.total.toFixed(2)}</span>
+                  </div>
                 </div>
-                <span className={`order-status ${order.status ? order.status.toLowerCase() : 'pending'}`}>
-                  {order.status ? order.status : 'Pending'}
-                </span>
-              </div>
-              <div className="order-card-body">
-                <ul className="order-items-list">
+                <ul className="order-books-list">
                   {order.items
                     .filter((item) => item.bookId)
                     .map((item) => (
-                      <li key={item.bookId._id} className="order-item-row">
-                        <div className="order-item-info">
-                          <span className="order-item-title">{item.bookId.title}</span>
-                          <span className="order-item-qty">x{item.quantity}</span>
-                        </div>
-                        <span className="order-item-price">₹{(item.bookId.price * item.quantity).toFixed(2)}</span>
+                      <li key={item.bookId._id} className="order-book-item">
+                        <span className="book-title">{item.bookId.title}</span>
+                        <span className="book-qty">× {item.quantity}</span>
+                        <span className="book-price">₹{item.bookId.price}</span>
                       </li>
                     ))}
                 </ul>
-              </div>
-              <div className="order-card-footer">
-                <span className="order-total-label">Total:</span>
-                <span className="order-total-amount">₹{order.total.toFixed(2)}</span>
-                {/* <button className="order-invoice-btn">Download Invoice</button> */}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </>
   );
 };
 

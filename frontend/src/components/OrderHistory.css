@@ -1,217 +1,171 @@
 /* OrderHistory.css */
 .order-history {
-    padding: 20px;
+    padding: 32px 0 32px 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a1a3c 0%, #b31217 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  }
+  
+  .order-history h1 {
+    color: #8d5252;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    letter-spacing: 1px;
+    text-align: center;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+  
+  .order-history .checkout-logo {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.5rem;
+    vertical-align: middle;
+    filter: drop-shadow(0 2px 8px rgba(10,26,60,0.18));
   }
   
   .order-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 5px;
+    background: rgba(44, 43, 44, 0.97);
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(10,26,60,0.13);
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 600px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  }
+  
+  .order-item:hover {
+    box-shadow: 0 8px 32px rgba(179,18,23,0.18);
+    transform: translateY(-4px) scale(1.02);
   }
   
   .order-item h2 {
-    margin: 0 0 10px;
+    margin: 0 0 10px 0;
+    color: #b31217;
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
   }
   
   .order-item p {
     margin: 5px 0;
+    color: #0a1a3c;
+    font-size: 1.05rem;
+    font-weight: 500;
   }
   
   .order-item ul {
-    margin: 10px 0 0;
-    padding-left: 20px;
+    margin: 14px 0 0 0;
+    padding-left: 0;
+    list-style: none;
   }
   
   .order-item ul li {
-    list-style-type: disc;
-  }
-
-  .order-history-pro {
-    max-width: 900px;
-    margin: 40px auto 0 auto;
-    padding: 32px 20px;
-    background: #f4f8fb;
-    border-radius: 18px;
-    box-shadow: 0 6px 32px rgba(52, 73, 94, 0.13);
-    min-height: 70vh;
-  }
-  
-  .order-history-header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  
-  .order-history-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1a2233;
+    background: rgba(10,26,60,0.06);
+    border-radius: 7px;
     margin-bottom: 8px;
-    letter-spacing: 1px;
-  }
-  
-  .order-history-subtitle {
-    color: #4a6073;
-    font-size: 1.1rem;
-    margin-bottom: 0;
-  }
-  
-  .order-history-empty {
+    padding: 0.7rem 0.9rem;
+    color: #222;
+    font-size: 1rem;
+    font-weight: 500;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-top: 48px;
-    color: #607d8b;
+    gap: 0.7rem;
+    transition: background 0.18s;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   }
   
-  .order-history-empty-img {
-    width: 120px;
-    margin-bottom: 18px;
-    opacity: 0.8;
+  .order-item ul li:hover {
+    background: #e30808;
+    color: #fff;
   }
   
-  .order-history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-  
-  .order-card {
-    background: #1a1a1a;
-    border-radius: 14px;
-    box-shadow: 0 2px 12px rgba(52, 152, 219, 0.07);
-    padding: 24px 28px 18px 28px;
-    transition: box-shadow 0.2s;
-    border-left: 6px solid #3498db;
-  }
-  
-  .order-card:hover {
-    box-shadow: 0 6px 24px rgba(52, 152, 219, 0.13);
-  }
-  
-  .order-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 18px;
-    color: #1a2233;
-  }
-  
-  .order-id {
-    font-weight: 600;
-    color: #1565c0;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-  }
-  
-  .order-date {
-    display: block;
-    color: #607d8b;
-    font-size: 0.98rem;
-    margin-top: 2px;
-  }
-  
-  .order-status {
-    padding: 4px 14px;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    background: #e1ecf7;
-    color: #1565c0;
-    text-transform: capitalize;
-    margin-left: 12px;
-  }
-  
-  .order-status.delivered {
-    background: #e8f6e8;
-    color: #219150;
-  }
-  
-  .order-status.cancelled {
-    background: #fdeaea;
-    color: #e74c3c;
-  }
-  
-  .order-status.pending {
-    background: #fff6e1;
-    color: #f39c12;
-  }
-  
-  .order-card-body {
-    margin-bottom: 12px;
-  }
-  
-  .order-items-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .order-item-row {
+  .order-summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 0;
-    border-bottom: 1px solid #eaeaea;
+    margin-bottom: 1.1rem;
+    flex-wrap: wrap;
+    gap: 0.7rem;
   }
   
-  .order-item-row:last-child {
-    border-bottom: none;
+  .order-label {
+    color: #b31217;
+    font-weight: 700;
+    margin-right: 0.3rem;
+    font-size: 1.05rem;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
   }
   
-  .order-item-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .order-item-title {
-    font-weight: 500;
-    color: #1a2233;
-  }
-  
-  .order-item-qty {
-    color: #607d8b;
-    font-size: 0.98rem;
-  }
-  
-  .order-item-price {
-    font-weight: 500;
-    color: #1565c0;
-  }
-  
-  .order-card-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .order-total-label {
-    color: #607d8b;
+  .order-value {
+    color: #0a1a3c;
+    font-weight: 600;
     font-size: 1.05rem;
   }
   
-  .order-total-amount {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #1a2233;
+  .order-books-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
   
-  .order-invoice-btn {
-    margin-left: 18px;
-    padding: 6px 18px;
-    background: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.98rem;
+  .order-book-item {
+    background: rgba(10, 26, 60, 0.06);
+    border-radius: 7px;
+    margin-bottom: 8px;
+    padding: 0.7rem 0.9rem;
+    color: #222;
+    font-size: 1rem;
     font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    transition: background 0.18s;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   }
-
-  .order-invoice-btn:hover {
-    background: #1565c0;
+  
+  .order-book-item:hover {
+    background: #f5e6e6;
+    color: #b31217;
+  }
+  
+  .book-title {
+    flex: 2;
+    font-weight: 600;
+    color: #0a1a3c;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  }
+  
+  .book-qty {
+    flex: 1;
+    color: #b31217;
+    font-weight: 700;
+  }
+  
+  .book-price {
+    flex: 1;
+    color: #222;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 700px) {
+    .order-item {
+      max-width: 98vw;
+      padding: 1rem 0.5rem;
+    }
+    .order-history {
+      padding: 18px 0 18px 0;
+    }
   }
