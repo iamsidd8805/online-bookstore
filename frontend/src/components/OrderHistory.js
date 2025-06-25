@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import './OrderHistory.css'; // Optional: Add styles for this component
+import './OrderHistory.css';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -10,16 +10,14 @@ const OrderHistory = () => {
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
-        console.log('Fetching order history for user:', user);
         const response = await axios.get('http://localhost:5000/api/orders', {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        console.log('Order history response:', response.data);
         setOrders(response.data);
       } catch (err) {
-        console.error('Error fetching order history:', err);
+        // Optionally show error UI
       }
     };
 
@@ -29,29 +27,62 @@ const OrderHistory = () => {
   }, [user]);
 
   return (
-    <div className="order-history">
-      <h1>Order History</h1>
+    <div className="order-history-pro">
+      <div className="order-history-header">
+        <h1>
+          <span role="img" aria-label="orders">📦</span> My Orders
+        </h1>
+        <p className="order-history-subtitle">
+          Track your recent purchases and download your invoices.
+        </p>
+      </div>
       {orders.length === 0 ? (
-        <p>No orders found.</p>
+        <div className="order-history-empty">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
+            alt="No orders"
+            className="order-history-empty-img"
+          />
+          <p>No orders found. Start shopping to see your orders here!</p>
+        </div>
       ) : (
-        <ul>
+        <div className="order-history-list">
           {orders.map((order) => (
-            <li key={order._id} className="order-item">
-              <h2>Order ID: {order._id}</h2>
-              <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-              <p>Total: ₹{order.total.toFixed(2)}</p>
-              <ul>
-                {order.items
-                .filter((item) => item.bookId)
-                .map((item) => (
-                  <li key={item.bookId._id}>
-                    {item.bookId.title} - {item.quantity} x ₹{item.bookId.price}
-                  </li>
-                ))}
-              </ul>
-            </li>
+            <div className="order-card" key={order._id}>
+              <div className="order-card-header">
+                <div>
+                  <span className="order-id">Order #{order._id.slice(-6).toUpperCase()}</span>
+                  <span className="order-date">
+                    {new Date(order.createdAt).toLocaleDateString()} &bull; {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+                <span className={`order-status ${order.status ? order.status.toLowerCase() : 'pending'}`}>
+                  {order.status ? order.status : 'Pending'}
+                </span>
+              </div>
+              <div className="order-card-body">
+                <ul className="order-items-list">
+                  {order.items
+                    .filter((item) => item.bookId)
+                    .map((item) => (
+                      <li key={item.bookId._id} className="order-item-row">
+                        <div className="order-item-info">
+                          <span className="order-item-title">{item.bookId.title}</span>
+                          <span className="order-item-qty">x{item.quantity}</span>
+                        </div>
+                        <span className="order-item-price">₹{(item.bookId.price * item.quantity).toFixed(2)}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+              <div className="order-card-footer">
+                <span className="order-total-label">Total:</span>
+                <span className="order-total-amount">₹{order.total.toFixed(2)}</span>
+                {/* <button className="order-invoice-btn">Download Invoice</button> */}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
