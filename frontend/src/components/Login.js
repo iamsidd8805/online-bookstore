@@ -16,6 +16,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [bgImage, setBgImage] = useState(images[0]);
+  const [error, setError] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -31,8 +32,13 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
+
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        username,
+        password,
+      });
 
       const userData = {
         token: response.data.token,
@@ -48,7 +54,11 @@ const Login = () => {
         navigate('/Home1');
       }
     } catch (err) {
-      console.error('Login error:', err.response?.data || err.message);
+      if (err.response?.status === 400) {
+        setError('Incorrect username or password.');
+      } else {
+        setError('An error occurred. Please try again later.');
+      }
     }
   };
 
@@ -59,6 +69,13 @@ const Login = () => {
     >
       <div className="login-box">
         <h1>Login</h1>
+
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username<span className='red'> *</span></label>
@@ -68,6 +85,7 @@ const Login = () => {
               placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              required
             />
           </div>
           <div className="input-group">
@@ -78,6 +96,7 @@ const Login = () => {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <div className="remember-me">

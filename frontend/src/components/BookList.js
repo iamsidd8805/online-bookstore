@@ -10,12 +10,14 @@ import Header from './Header';
 const BookList = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [genres, setGenres] = useState([]); // ✅ stores all genres
+  const [genres, setGenres] = useState([]);
   const [filterGenre, setFilterGenre] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
   const [isNewest, setIsNewest] = useState(false);
+
   const { addToCart, clearCart } = useContext(CartContext);
   const { logout } = useContext(AuthContext);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,7 +34,6 @@ const BookList = () => {
       setBooks(response.data);
       setFilteredBooks(response.data);
 
-      // ✅ If fetching all books, store all genres
       if (!params.get('genre') && !params.get('sort') && !params.get('sale')) {
         const uniqueGenres = [...new Set(response.data.map(book => book.genre))];
         setGenres(uniqueGenres);
@@ -53,7 +54,8 @@ const BookList = () => {
     const sale = params.get('sale');
 
     if (genre) {
-      handleFilter(genre);
+      setFilterGenre(genre);
+      applyFilters(searchTitle, genre);
       setIsNewest(false);
     } else if (sort === 'newest') {
       setIsNewest(true);
@@ -66,31 +68,7 @@ const BookList = () => {
       setFilterGenre('');
       setIsNewest(false);
     }
-  }, [location.search, books]);
-
-  const handleAddToCart = async (bookId) => {
-    await addToCart(bookId);
-    setBooks(prevBooks =>
-      prevBooks.map(book =>
-        book._id === bookId && book.quantity > 0
-          ? { ...book, quantity: book.quantity - 1 }
-          : book
-      )
-    );
-    setFilteredBooks(prevFiltered =>
-      prevFiltered.map(book =>
-        book._id === bookId && book.quantity > 0
-          ? { ...book, quantity: book.quantity - 1 }
-          : book
-      )
-    );
-  };
-
-  const handleLogout = () => {
-    clearCart();
-    logout();
-    navigate('/home1');
-  };
+  }, [location.search]); // ✅ Only listening to search query, not books
 
   const applyFilters = (title, genre) => {
     let filtered = books;
@@ -122,11 +100,31 @@ const BookList = () => {
     applyFilters(searchTitle, genre);
   };
 
-  // ✅ New: check if URL has ?genre
+  const handleAddToCart = async (bookId) => {
+    await addToCart(bookId);
+
+    const updatedBooks = books.map(book =>
+      book._id === bookId && book.quantity > 0
+        ? { ...book, quantity: book.quantity - 1 }
+        : book
+    );
+
+    setBooks(updatedBooks);
+    applyFilters(searchTitle, filterGenre);
+
+    // ✅ Simple alert instead of toast
+    alert('Book added to cart!');
+  };
+
+  const handleLogout = () => {
+    clearCart();
+    logout();
+    navigate('/home1');
+  };
+
   const params = new URLSearchParams(location.search);
   const hasGenreParam = params.get('genre');
   const hasSaleParam = params.get('sale') === 'true';
-
 
   return (
     <div>
@@ -140,9 +138,6 @@ const BookList = () => {
           onSearch={handleSearch}
         />
 
-        {/* ✅ Show genre drop-down only if:
-            - not newest
-            - not URL with ?genre=... */}
         {!isNewest && !hasGenreParam && !hasSaleParam && (
           <div className="genre-dropdown">
             <label htmlFor="genre">Select Genre: </label>

@@ -113,3 +113,14 @@
   font-size: 20px;
   line-height: 1;
 }
+
+.error-message {
+  color: #ff4d4f;
+  background-color: rgba(255, 0, 0, 0.1);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid #ff4d4f;
+}

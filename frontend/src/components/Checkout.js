@@ -10,50 +10,29 @@ const Checkout = () => {
   const [orderDetails, setOrderDetails] = useState(null);
   const navigate = useNavigate();
 
-  // Use salePrice if available, else use price
-  const subtotal = cart.reduce(
-    (total, item) =>
-      total +
-      (item.bookId.salePrice && item.bookId.salePrice < item.bookId.price
-        ? item.bookId.salePrice
-        : item.bookId.price) * item.quantity,
-    0
-  );
+  const subtotal = cart.reduce((total, item) => {
+    const price = item.bookId.salePrice && item.bookId.salePrice < item.bookId.price
+      ? item.bookId.salePrice
+      : item.bookId.price;
+    return total + price * item.quantity;
+  }, 0);
 
-  const tax = subtotal * 0.12; // 12% tax
-  const discount = subtotal > 1000 ? subtotal * 0.05 : 0; // 5% discount if subtotal > 1000
+  const tax = subtotal * 0.12;
+  const discount = subtotal > 1000 ? subtotal * 0.05 : 0;
   const total = subtotal + tax - discount;
 
   const handleBuyNow = async () => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      if (!user || !user.token) {
-        throw new Error('User not logged in or token missing');
-      }
+      if (!user?.token) throw new Error('User not logged in');
 
-      const response = await axios.post(
+      await axios.post(
         'http://localhost:5000/api/cart/checkout',
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${user.token}` } }
       );
 
-      console.log('Checkout response:', response.data);
-
-      setOrderDetails({
-        cart: cart.map((item) => ({
-          ...item,
-          quantity: item.quantity,
-        })),
-        subtotal,
-        tax,
-        discount,
-        total,
-      });
-
+      setOrderDetails({ cart: JSON.parse(JSON.stringify(cart)), subtotal, tax, discount, total });
       setOrderConfirmed(true);
       clearCart();
     } catch (err) {
@@ -63,110 +42,92 @@ const Checkout = () => {
 
   return (
     <div className="checkout">
-      {!orderConfirmed && (
+      {!orderConfirmed ? (
         <>
-          <h1>Checkout</h1>
+          <h1 className="checkout-title">Checkout</h1>
           <img
             src="https://cdn-icons-png.flaticon.com/512/11181/11181359.png"
-            alt="Checkout Logo"
+            alt="Checkout"
             className="checkout-logo"
           />
-        </>
-      )}
-
-      {orderConfirmed ? (
-        <div className="order-confirmed">
-          <h2>Your order has been confirmed!</h2>
-          <h3>Order Details:</h3>
-          <ul>
-            {orderDetails.cart.map((item) => {
-              const priceToShow =
-                item.bookId.salePrice && item.bookId.salePrice < item.bookId.price
-                  ? item.bookId.salePrice
-                  : item.bookId.price;
-              return (
-                <li key={item.bookId._id}>
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <img
-                            src={item.bookId.coverImage}
-                            alt={item.bookId.title}
-                            className="cart-item-image"
-                          />
-                        </td>
-                        <td>
-                          {item.bookId.title} - {item.quantity} x ₹{priceToShow} = ₹
-                          {item.quantity * priceToShow}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </li>
-              );
-            })}
-          </ul>
-          <p>Subtotal: ₹{orderDetails.subtotal.toFixed(2)}</p>
-          <p>Tax (12%): ₹{orderDetails.tax.toFixed(2)}</p>
-          <p>Discount (5%): ₹{orderDetails.discount.toFixed(2)}</p>
-          <p>Total: ₹{orderDetails.total.toFixed(2)}</p>
-
-          <button onClick={() => navigate('/shop')} className="continue-shopping-button">
-            Continue Shopping
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="cart-items">
+          <div className="cart-items-container">
             {cart.map((item) => {
-              const priceToShow =
+              const price =
                 item.bookId.salePrice && item.bookId.salePrice < item.bookId.price
                   ? item.bookId.salePrice
                   : item.bookId.price;
               return (
-                <div key={item.bookId._id} className="cart-item">
+                <div className="cart-card" key={item.bookId._id}>
                   <img src={item.bookId.coverImage} alt={item.bookId.title} />
-                  <div className="book-details">
+                  <div className="cart-details">
                     <h2>{item.bookId.title}</h2>
                     <p>Author: {item.bookId.author}</p>
                     <p>
                       Price:{' '}
                       {item.bookId.salePrice && item.bookId.salePrice < item.bookId.price ? (
                         <>
-                          <span style={{ textDecoration: 'line-through', color: 'red' }}>
-                            ₹{item.bookId.price}
-                          </span>{' '}
-                          <span style={{ fontWeight: 'bold', color: 'green' }}>
-                            ₹{item.bookId.salePrice}
-                          </span>
+                          <span className="strikethrough">₹{item.bookId.price}</span>{' '}
+                          <span className="highlight">₹{item.bookId.salePrice}</span>
                         </>
                       ) : (
                         <>₹{item.bookId.price}</>
                       )}
                     </p>
                     <p>Quantity: {item.quantity}</p>
-                    <p>Total: ₹{item.quantity * priceToShow}</p>
+                    <p>Total: ₹{item.quantity * price}</p>
                   </div>
                 </div>
               );
             })}
           </div>
-          <div className="price-summary">
+
+          <div className="summary-box">
+            <h3>Order Summary</h3>
             <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
             <p>Tax (12%): ₹{tax.toFixed(2)}</p>
             <p>Discount (5%): ₹{discount.toFixed(2)}</p>
-            <p>Total: ₹{total.toFixed(2)}</p>
+            <h3>Total: ₹{total.toFixed(2)}</h3>
           </div>
-          <div className="checkout-buttons">
-            <button onClick={() => navigate('/cart')} className="back-button-checkout">
-              Back
-            </button>
-            <button onClick={handleBuyNow} className="buy-now-button">
-              Buy Now
-            </button>
+
+          <div className="checkout-actions">
+            <button onClick={() => navigate('/cart')} className="btn-secondary">Back</button>
+            <button onClick={handleBuyNow} className="btn-primary">Buy Now</button>
           </div>
         </>
+      ) : (
+        <div className="order-confirmation">
+          <h2>✅ Order Confirmed!</h2>
+          <p>Thank you for your purchase.</p>
+          <div className="order-summary">
+            <h3>Items Ordered:</h3>
+            {orderDetails.cart.map((item) => {
+              const price =
+                item.bookId.salePrice && item.bookId.salePrice < item.bookId.price
+                  ? item.bookId.salePrice
+                  : item.bookId.price;
+              return (
+                <div className="order-item" key={item.bookId._id}>
+                  <img src={item.bookId.coverImage} alt={item.bookId.title} />
+                  <div>
+                    <h4>{item.bookId.title}</h4>
+                    <p>Quantity: {item.quantity}</p>
+                    <p>Price: ₹{price}</p>
+                    <p>Total: ₹{item.quantity * price}</p>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="summary-box">
+              <p>Subtotal: ₹{orderDetails.subtotal.toFixed(2)}</p>
+              <p>Tax: ₹{orderDetails.tax.toFixed(2)}</p>
+              <p>Discount: ₹{orderDetails.discount.toFixed(2)}</p>
+              <h3>Total Paid: ₹{orderDetails.total.toFixed(2)}</h3>
+            </div>
+          </div>
+          <button onClick={() => navigate('/shop')} className="btn-primary">
+            Continue Shopping
+          </button>
+        </div>
       )}
     </div>
   );
