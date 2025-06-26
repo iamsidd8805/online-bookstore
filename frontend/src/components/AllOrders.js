@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './AllOrders.css';
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
   const [filterUser, setFilterUser] = useState(''); // ✅ new state for user name filter
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAllOrders = async () => {
@@ -34,6 +36,9 @@ const AllOrders = () => {
 
   return (
     <div className="all-orders">
+      <button className="back-button" onClick={() => navigate('/admin')}>
+        Back to Dashboard
+      </button>
       <h1>All Orders</h1>
 
       {/* ✅ Search input */}
