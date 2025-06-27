@@ -22,7 +22,7 @@ const OrderHistory = () => {
       } catch (err) {
         console.error('Error fetching order history:', err);
       }
-    };
+    }
 
     if (user) {
       fetchOrderHistory();

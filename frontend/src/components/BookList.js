@@ -27,7 +27,7 @@ const BookList = () => {
       let url = 'http://localhost:5000/api/books';
 
       if (params.toString()) {
-        url += `?${params.toString()}`;
+        url += '?' + params.toString();
       }
 
       const response = await axios.get(url);
@@ -53,13 +53,18 @@ const BookList = () => {
     const sort = params.get('sort');
     const sale = params.get('sale');
 
+    if (books.length === 0) return;
+
     if (genre) {
       setFilterGenre(genre);
       applyFilters(searchTitle, genre);
       setIsNewest(false);
     } else if (sort === 'newest') {
       setIsNewest(true);
-      setFilteredBooks(books.slice(0, 8));
+      const sortedBooks = [...books].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setFilteredBooks(sortedBooks.slice(0, 8));
     } else if (sale === 'true') {
       setIsNewest(false);
       setFilteredBooks(books);
@@ -68,7 +73,7 @@ const BookList = () => {
       setFilterGenre('');
       setIsNewest(false);
     }
-  }, [location.search]); // ✅ Only listening to search query, not books
+  }, [location.search, books]);
 
   const applyFilters = (title, genre) => {
     let filtered = books;
@@ -97,6 +102,16 @@ const BookList = () => {
   const handleFilter = (genre) => {
     setFilterGenre(genre);
     setIsNewest(false);
+
+    // Sync genre with URL
+    const params = new URLSearchParams(location.search);
+    if (genre === 'All') {
+      params.delete('genre');
+    } else {
+      params.set('genre', genre);
+    }
+
+    navigate({ search: params.toString() });
     applyFilters(searchTitle, genre);
   };
 
@@ -110,9 +125,12 @@ const BookList = () => {
     );
 
     setBooks(updatedBooks);
-    applyFilters(searchTitle, filterGenre);
 
-    // ✅ Simple alert instead of toast
+    // Use URL params to reapply filters
+    const params = new URLSearchParams(location.search);
+    const genre = params.get('genre') || filterGenre || '';
+    applyFilters(searchTitle, genre);
+
     alert('Book added to cart!');
   };
 
@@ -138,7 +156,7 @@ const BookList = () => {
           onSearch={handleSearch}
         />
 
-        {!isNewest && !hasGenreParam && !hasSaleParam && (
+        {!isNewest && !hasSaleParam && (
           <div className="genre-dropdown">
             <label htmlFor="genre">Select Genre: </label>
             <select
