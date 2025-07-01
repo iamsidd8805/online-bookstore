@@ -22,7 +22,7 @@ const Header = () => {
 
   return (
     <header className="main-header">
-      <div className="logo" onClick={() => handleNavClick('/')}>
+      <div className="logo" onClick={() => handleNavClick('/home1')}>
         <span role="img" aria-label="book">📚</span>
         <span className="logo-text">BookVerse</span>
       </div>
